@@ -1,0 +1,3 @@
+rootProject.name = "Shibe"
+include ':app'
+include ':imageloader'
