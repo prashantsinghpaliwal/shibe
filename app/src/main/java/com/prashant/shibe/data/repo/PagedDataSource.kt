@@ -4,14 +4,12 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.prashant.shibe.common.Resource
-import com.prashant.shibe.data.local.ShibeDao
 import com.prashant.shibe.data.local.ShibeLocal
 import com.prashant.shibe.network.ShibeService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 
 class PagedDataSource(
-    private val remoteDataSource: ShibeService,
-    private val localDataSource: ShibeDao
+    private val remoteDataSource: ShibeService
 ) : PageKeyedDataSource<Long, ShibeLocal>() {
 
     private var networkState = MutableLiveData<Resource<Any>>()
@@ -26,14 +24,11 @@ class PagedDataSource(
     ) {
         networkState.postValue(Resource.loading())
 
-        remoteDataSource.getShibes(1, 10, false)
+        remoteDataSource.getShibes(1, 8, false)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 it?.let {
                     Log.v("PagingLogs", "data ${it}")
-
-//                    localDataSource.deleteAll()
-//                    localDataSource.insertAll(it)
                     networkState.postValue(Resource.success(it))
                     callback.onResult(it, null, 2)
 
@@ -52,12 +47,11 @@ class PagedDataSource(
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, ShibeLocal>) {
         networkState.postValue(Resource.loading())
 
-        remoteDataSource.getShibes((params.key).toInt(), 10, true)
+        remoteDataSource.getShibes((params.key).toInt(), 8, true)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 it?.let {
                     Log.v("PagingLogs", "data for page ${params.key} -> ${it}")
-//                    localDataSource.insertAll(it)
                     networkState.postValue(Resource.success(it))
                     callback.onResult(it, params.key + 1)
                 }

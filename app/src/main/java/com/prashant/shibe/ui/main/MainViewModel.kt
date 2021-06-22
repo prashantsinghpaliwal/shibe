@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.prashant.shibe.common.Resource
-import com.prashant.shibe.data.local.ShibeDao
 import com.prashant.shibe.data.local.ShibeLocal
 import com.prashant.shibe.data.repo.DataSourceFactory
 import com.prashant.shibe.data.repo.PagedDataSource
@@ -16,7 +15,9 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 
-class MainViewModel @ViewModelInject constructor(shibeService: ShibeService, shibeDao: ShibeDao) :
+class MainViewModel @ViewModelInject constructor(
+    shibeService: ShibeService
+) :
     ViewModel() {
 
     private var photoDataSourceFactory: DataSourceFactory? = null
@@ -27,7 +28,7 @@ class MainViewModel @ViewModelInject constructor(shibeService: ShibeService, shi
 
 
     init {
-        photoDataSourceFactory = DataSourceFactory(shibeService, shibeDao)
+        photoDataSourceFactory = DataSourceFactory(shibeService)
         dataSourceMutableLiveData = photoDataSourceFactory?.getMutableLiveData()
 
         val config = PagedList.Config.Builder()

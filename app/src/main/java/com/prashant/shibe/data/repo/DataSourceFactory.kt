@@ -3,13 +3,11 @@ package com.prashant.shibe.data.repo
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import com.prashant.shibe.common.Resource
-import com.prashant.shibe.data.local.ShibeDao
 import com.prashant.shibe.data.local.ShibeLocal
 import com.prashant.shibe.network.ShibeService
 
 
-class DataSourceFactory(private val remoteDataSource: ShibeService,
-                        private val localDataSource: ShibeDao
+class DataSourceFactory(private val remoteDataSource: ShibeService
 ) :
     DataSource.Factory<Long, ShibeLocal>() {
 
@@ -22,7 +20,7 @@ class DataSourceFactory(private val remoteDataSource: ShibeService,
     }
 
     override fun create(): DataSource<Long, ShibeLocal>? {
-        pagedDataSource = PagedDataSource(remoteDataSource, localDataSource)
+        pagedDataSource = PagedDataSource(remoteDataSource)
         mutableLiveData.postValue(pagedDataSource)
         networkState.postValue(Resource.loading())
         return pagedDataSource

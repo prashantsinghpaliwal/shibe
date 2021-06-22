@@ -2,9 +2,6 @@ package com.prashant.shibe.di
 
 import android.content.Context
 import com.prashant.shibe.BuildConfig
-import com.prashant.shibe.data.local.AppDatabase
-import com.prashant.shibe.data.local.ShibeDao
-import com.prashant.shibe.data.repo.ShibeRepository
 import com.prashant.shibe.network.ShibeApi
 import com.prashant.shibe.network.ShibeService
 import dagger.Module
@@ -32,30 +29,9 @@ object ShibeModule {
 
     @Provides
     fun shibeService(
-        api: ShibeApi,
-        dao: ShibeDao
+        api: ShibeApi
     ): ShibeService {
-        return ShibeService.Impl(
-            api, dao
-        )
+        return ShibeService.Impl(api)
     }
-
-    @Singleton
-    @Provides
-    fun provideDatabase(@ApplicationContext appContext: Context) =
-        AppDatabase.getDatabase(appContext)
-
-
-    @Singleton
-    @Provides
-    fun provideshibeDao(db: AppDatabase) = db.shibeDao()
-
-    @Singleton
-    @Provides
-    fun provideRepository(
-        remoteDataSource: ShibeService,
-        localDataSource: ShibeDao
-    ) = ShibeRepository(remoteDataSource, localDataSource)
-
 
 }

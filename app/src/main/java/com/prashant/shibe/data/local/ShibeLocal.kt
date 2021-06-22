@@ -1,15 +1,37 @@
 package com.prashant.shibe.data.local
 
+import androidx.annotation.NonNull
+import androidx.recyclerview.widget.DiffUtil
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "shibe")
+
 data class ShibeLocal(
 
     var imageUrl: String? = "",
 
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
+    var id: Int = 0
 
-)
+){
+
+    companion object {
+        val CALLBACK: DiffUtil.ItemCallback<ShibeLocal> =
+            object : DiffUtil.ItemCallback<ShibeLocal>() {
+                override fun areItemsTheSame(
+                    @NonNull items: ShibeLocal,
+                    @NonNull t1: ShibeLocal
+                ): Boolean {
+                    return items.id === t1.id
+                }
+
+                override fun areContentsTheSame(
+                    @NonNull items: ShibeLocal,
+                    @NonNull t1: ShibeLocal
+                ): Boolean {
+                    return true
+                }
+            }
+    }
+
+}

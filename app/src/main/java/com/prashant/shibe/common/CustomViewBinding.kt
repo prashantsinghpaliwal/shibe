@@ -1,53 +1,26 @@
 package com.prashant.shibe.common
 
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import com.prashant.imageloader.ImageLoader
+import com.prashant.shibe.R
 import java.util.*
 
 
-//@BindingAdapter(value = ["setImageUrl"])
-//fun bindImageUrl(view: ImageView, url: String?) {
-//    if (url != null && url.isNotBlank()) {
-//        Glide.with(view.context)
-//            .load(url)
-//            .fitCenter()
-//            .diskCacheStrategy(DiskCacheStrategy.ALL)
-//            .listener(object : RequestListener<Drawable> {
-//                override fun onLoadFailed(
-//                    e: GlideException?,
-//                    model: Any?,
-//                    target: Target<Drawable>?,
-//                    isFirstResource: Boolean
-//                ): Boolean {
-//                    return true
-//                }
-//
-//                override fun onResourceReady(
-//                    resource: Drawable?,
-//                    model: Any?,
-//                    target: Target<Drawable>?,
-//                    dataSource: DataSource?,
-//                    isFirstResource: Boolean
-//                ): Boolean {
-//                    return false
-//                }
-//            })
-//            .into(view)
-//    }
-//}
-//
-//@BindingAdapter(value = ["setRoundedImageUrl"])
-//fun bindRoundedImageUrl(view: ImageView, url: String?) {
-//    if (url != null && url.isNotBlank()) {
-//        Glide.with(view.context)
-//            .load(url)
-//            .transition(withCrossFade())
-//            .apply(RequestOptions().transform(RoundedCorners(50)))
-//            .into(view)
-//    }
-//}
+@BindingAdapter(value = ["setRoundedImageUrl"])
+fun bindRoundedImageUrl(view: ImageView, url: String?) {
+    if (url != null && url.isNotBlank()) {
+        ImageLoader.with(view.context)
+            .placeHolder(ContextCompat.getDrawable(view.context, R.drawable.ic_photo_24)!!)
+            .roundedCorners(50)
+            .load(
+                view,
+                url
+            )
+    }
+}
 
 fun getRandomColor(): Int {
     val rand = Random()

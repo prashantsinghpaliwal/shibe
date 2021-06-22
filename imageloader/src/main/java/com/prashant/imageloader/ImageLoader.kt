@@ -1,11 +1,16 @@
 package com.prashant.imageloader
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.LruCache
+import android.view.View
+import android.view.ViewOutlineProvider
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.RoundedBitmapDrawable
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,13 +20,15 @@ import java.net.URL
 import java.util.*
 import java.util.Collections.synchronizedMap
 
-class ImageLoader(context: Context) {
+
+class ImageLoader(private val context: Context) {
 
     private val maxCacheSize: Int = (Runtime.getRuntime().maxMemory() / 1024).toInt() / 8
     private val memoryCache: LruCache<String, Bitmap>
 
     private val imageViewMap = synchronizedMap(WeakHashMap<ImageView, String>())
     private var placeHolder: Drawable? = null
+    private var roundedCorners: Int? = null
 
     init {
         memoryCache = object : LruCache<String, Bitmap>(maxCacheSize) {
@@ -99,9 +106,31 @@ class ImageLoader(context: Context) {
         scaledBitmap?.let {
             if (!isImageViewReused(ImageRequest(imageUrl, imageView))) {
                 imageView.post {
+                   roundedCorners?.let {
+                       setRoundedCorners(imageView)
+                   }
                     imageView.setImageBitmap(scaledBitmap)
                 }
             }
+        }
+
+    }
+
+    private fun setRoundedCorners(imageView: ImageView) {
+        val randomColor = getRandomColor()
+        val drawable = ContextCompat.getDrawable(context, R.drawable.cardview_bg)
+        drawable?.mutate()?.setColorFilter(randomColor, PorterDuff.Mode.SRC_ATOP)
+        imageView.background = drawable
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            val provider = object : ViewOutlineProvider() {
+//                override fun getOutline(view: View?, outline: Outline?) {
+//                    val margin = context.resources.getDimension(R.dimen.margin_15dp).toInt()
+//                    outline?.setRoundRect(0, 0, view!!.width,
+//                        (view.height + margin), margin.toFloat())
+//                }
+//            }
+//            imageView.outlineProvider = provider
+            imageView.clipToOutline = true
         }
 
     }
@@ -148,5 +177,20 @@ class ImageLoader(context: Context) {
     fun placeHolder(placeHolder: Drawable): ImageLoader {
         this.placeHolder = placeHolder
         return INSTANCE!!
+    }
+
+    fun roundedCorners(roundedCorners: Int): ImageLoader {
+        this.roundedCorners = roundedCorners
+        return INSTANCE!!
+    }
+
+   private fun getRandomColor(): Int {
+        val rand = Random()
+        val randomColor: Int
+        val r = rand.nextInt(256)
+        val g = rand.nextInt(256)
+        val b = rand.nextInt(256)
+        randomColor = Color.argb((255 * 0.2).toInt(), r, g, b)
+        return randomColor
     }
 }
