@@ -6,11 +6,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bigsteptech.deazzle.common.gone
-import com.bigsteptech.deazzle.common.visible
 import com.prashant.shibe.common.LoaderState
 import com.prashant.shibe.databinding.ActivityMainBinding
 import com.prashant.shibe.ui.SpacesItemDecoration
-import com.prashant.shibe.ui.main.PagedShibeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

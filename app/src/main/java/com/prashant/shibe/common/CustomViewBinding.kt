@@ -21,13 +21,3 @@ fun bindRoundedImageUrl(view: ImageView, url: String?) {
             )
     }
 }
-
-fun getRandomColor(): Int {
-    val rand = Random()
-    val randomColor: Int
-    val r = rand.nextInt(256)
-    val g = rand.nextInt(256)
-    val b = rand.nextInt(256)
-    randomColor = Color.argb((255 * 0.2).toInt(), r, g, b)
-    return randomColor
-}

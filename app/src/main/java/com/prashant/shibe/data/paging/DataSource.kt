@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.bigsteptech.deazzle.data.local.ShibeDao
+import com.prashant.shibe.common.Const
 import com.prashant.shibe.common.LoaderState
 import com.prashant.shibe.data.local.ShibeLocal
 import com.prashant.shibe.network.ShibeService
@@ -20,7 +21,7 @@ class DataSource(
         val pageNumber: Long = params.key
         val next: Long = pageNumber + 1
 
-        remoteDataSource.getShibes(pageNumber.toInt(), 8, false)
+        remoteDataSource.getShibes(pageNumber.toInt(), Const.PAGE_SIZE, false)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 it?.let {
@@ -48,7 +49,7 @@ class DataSource(
         val prev: Long = pageNumber - 1
 
         liveLoaderState.postValue(LoaderState.LOADING)
-        remoteDataSource.getShibes(1, 8, false)
+        remoteDataSource.getShibes(1, Const.PAGE_SIZE, false)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 it?.let {

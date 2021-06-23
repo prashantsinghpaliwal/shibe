@@ -1,4 +1,4 @@
-package com.prashant.shibe.ui.main
+package com.prashant.shibe.ui.shibe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
