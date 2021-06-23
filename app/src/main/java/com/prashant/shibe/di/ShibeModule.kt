@@ -1,7 +1,11 @@
 package com.prashant.shibe.di
 
 import android.content.Context
+import com.bigsteptech.deazzle.data.local.ShibeDao
 import com.prashant.shibe.BuildConfig
+import com.prashant.shibe.data.local.AppDatabase
+import com.prashant.shibe.data.paging.ShibeRepository
+import com.prashant.shibe.network.NetworkHelper
 import com.prashant.shibe.network.ShibeApi
 import com.prashant.shibe.network.ShibeService
 import dagger.Module
@@ -29,9 +33,28 @@ object ShibeModule {
 
     @Provides
     fun shibeService(
-        api: ShibeApi
+        api: ShibeApi,
+        dao: ShibeDao
     ): ShibeService {
-        return ShibeService.Impl(api)
+        return ShibeService.Impl(api, dao)
     }
+
+    @Singleton
+    @Provides
+    fun provideDatabase(@ApplicationContext appContext: Context) =
+        AppDatabase.getDatabase(appContext)
+
+    @Singleton
+    @Provides
+    fun provideProfileDao(db: AppDatabase) = db.shibeDao()
+
+    @Singleton
+    @Provides
+    fun provideRepository(
+        remoteDataSource: ShibeService,
+        localDataSource: ShibeDao,
+        networkHelper: NetworkHelper
+    ) =
+        ShibeRepository(remoteDataSource, localDataSource, networkHelper)
 
 }

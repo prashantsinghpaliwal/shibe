@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.prashant.shibe.BuildConfig
+import com.prashant.shibe.network.NetworkHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -86,5 +87,9 @@ object NetworkModule {
             .build()
     }
 
+    @Singleton
+    @Provides
+    fun provideNetworkHelper(@ApplicationContext appContext: Context): NetworkHelper =
+        NetworkHelper(appContext)
 
 }

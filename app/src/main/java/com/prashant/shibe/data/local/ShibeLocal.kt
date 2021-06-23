@@ -2,15 +2,19 @@ package com.prashant.shibe.data.local
 
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.DiffUtil
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-
+@Entity(tableName = "shibe_table")
 data class ShibeLocal(
 
+    @ColumnInfo(name = "imageUrl")
     var imageUrl: String? = "",
 
+    @NonNull
+    @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 
 ){
